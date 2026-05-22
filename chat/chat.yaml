@@ -1,4 +1,4 @@
-# Producer
+# Producer Pod
 apiVersion: v1
 kind: Pod
 metadata:
@@ -14,7 +14,7 @@ spec:
     image: producer-app:v1
     imagePullPolicy: Never
 ---
-# Consumer
+# Consumer Pod
 apiVersion: v1
 kind: Pod
 metadata:
