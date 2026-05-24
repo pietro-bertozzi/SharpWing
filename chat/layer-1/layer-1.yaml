@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: producer-deployment
+  name: layer1-deployment
   labels:
-    app: python-producer
+    app: layer-1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-producer
+      app: layer-1
   template:
     metadata:
       labels:
-        app: python-producer
+        app: layer-1
     spec:
       containers:
-      - name: producer
-        image: producer-app:v1
+      - name: layer-1
+        image: layer1-app:v1
         imagePullPolicy: IfNotPresent

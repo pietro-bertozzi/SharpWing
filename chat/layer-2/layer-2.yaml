@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: consumer-deployment
+  name: layer2-deployment
   labels:
-    app: python-consumer
+    app: layer-2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-consumer
+      app: layer-2
   template:
     metadata:
       labels:
-        app: python-consumer
+        app: layer-2
     spec:
       containers:
-      - name: consumer
-        image: consumer-app:v1
+      - name: layer-2
+        image: layer2-app:v1
         imagePullPolicy: IfNotPresent

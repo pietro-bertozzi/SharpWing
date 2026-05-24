@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: layer3-deployment
+  labels:
+    app: layer-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: layer-3
+  template:
+    metadata:
+      labels:
+        app: layer-3
+    spec:
+      containers:
+      - name: layer-3
+        image: layer3-app:v1
+        imagePullPolicy: IfNotPresent
