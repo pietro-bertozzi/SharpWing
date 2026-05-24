@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 RUN pip install --no-cache-dir -U pip setuptools wheel
-RUN pip install --no-cache-dir kafka-python-ng psycopg2
+RUN pip install --no-cache-dir kafka-python-ng psycopg2 redis
 
 COPY layer-3.py .
 
