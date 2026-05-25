@@ -32,3 +32,31 @@ SELECT COUNT(*) FROM transazioni;
 
 watch -n 1 "kubectl exec -it deployment/redis-deployment -- redis-cli dbsize"
 '''
+
+'''
+kubectl create namespace monitoring
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
+  -n monitoring \
+  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false
+
+kubectl get secret --namespace monitoring kube-prom-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+helm install postgres-exporter prometheus-community/prometheus-postgres-exporter \
+  --set config.datasource.host="postgres-service.default.svc.cluster.local" \
+  --set config.datasource.user="pietro_user" \
+  --set config.datasource.password="super_password_123" \
+  --set config.datasource.database="pipeline_db" \
+  --set config.datasource.sslmode="disable" \
+  --set serviceMonitor.enabled=true \
+  --set serviceMonitor.additionalLabels.release="kube-prom-stack" \
+  --set prometheus.monitor.enabled=true \
+  --set prometheus.monitor.additionalLabels.release="kube-prom-stack"
+
+kubectl port-forward -n monitoring deployment/kube-prom-stack-grafana 3000:3000
+kubectl port-forward -n monitoring svc/kube-prom-stack-kube-prome-prometheus 9090:9090
+'''
