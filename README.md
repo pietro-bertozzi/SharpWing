@@ -1,5 +1,7 @@
 # SharpWing
 
+We’re currently developing a bank-grade fraud detection system with my university peers, Foroozanfar Arash and Wewiór Mikołaj, forming a highly international team. Scheduled for completion on June 7th, our engineering research focuses on balancing fast, reliable, and cost-effective checks. To achieve this, we are orchestrating a scalable data pipeline via Kubernetes, Kafka, Redis, PostgreSQL, Prometheus, Grafana, and Loki, implementing an LLM-as-a-judge architecture for real-time verification.
+
 '''
 kubectl delete deployments --all  
 kubectl delete services --all
