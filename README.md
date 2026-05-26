@@ -49,15 +49,29 @@ helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
 kubectl get secret --namespace monitoring kube-prom-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 
 helm install postgres-exporter prometheus-community/prometheus-postgres-exporter \
-  --set config.datasource.host="postgres-service.default.svc.cluster.local" \
-  --set config.datasource.user="pietro_user" \
-  --set config.datasource.password="super_password_123" \
-  --set config.datasource.database="pipeline_db" \
-  --set config.datasource.sslmode="disable" \
-  --set serviceMonitor.enabled=true \
-  --set serviceMonitor.additionalLabels.release="kube-prom-stack" \
-  --set prometheus.monitor.enabled=true \
-  --set prometheus.monitor.additionalLabels.release="kube-prom-stack"
+  --set prometheus.serviceMonitor.enabled=true \
+  --set prometheus.serviceMonitor.namespace="default" \
+  --set prometheus.serviceMonitor.additionalLabels.release="kube-prom-stack" \
+  --set env[0].name="DATA_SOURCE_URI" \
+  --set env[0].value="postgres-service.default.svc.cluster.local:5432/postgres?sslmode=disable" \
+  --set env[1].name="DATA_SOURCE_USER" \
+  --set env[1].value="postgres" \
+  --set env[2].name="DATA_SOURCE_PASS" \
+  --set env[2].value="postgres"
+
+helm install redis-exporter prometheus-community/prometheus-redis-exporter \
+  --set prometheus.serviceMonitor.enabled=true \
+  --set prometheus.serviceMonitor.namespace="default" \
+  --set prometheus.serviceMonitor.additionalLabels.release="kube-prom-stack" \
+  --set redisAddress="redis://redis-service.default.svc.cluster.local:6379"
+
+helm install kafka-exporter prometheus-community/prometheus-kafka-exporter \
+  --set kafkaServer="{my-kafka.default.svc.cluster.local:9092}" \
+  --set prometheus.serviceMonitor.enabled=true \
+  --set prometheus.serviceMonitor.namespace="default" \
+  --set prometheus.serviceMonitor.additionalLabels.release="kube-prom-stack" \
+  --set "prometheus.serviceMonitor.relabelings[0].targetLabel=job" \
+  --set "prometheus.serviceMonitor.relabelings[0].replacement=kafka-exporter"
 
 kubectl port-forward -n monitoring deployment/kube-prom-stack-grafana 3000:3000
 kubectl port-forward -n monitoring svc/kube-prom-stack-kube-prome-prometheus 9090:9090
