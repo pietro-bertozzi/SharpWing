@@ -33,6 +33,10 @@ SELECT COUNT(*) FROM transazioni;
 \q
 
 watch -n 1 "kubectl exec -it deployment/redis-deployment -- redis-cli dbsize"
+
+helm upgrade kube-prom-stack prometheus-community/kube-prometheus-stack -n monitoring -f grafana-loki.yaml --reuse-values
+
+helm upgrade --install loki grafana/loki-stack --set promtail.enabled=true --namespace default
 '''
 
 '''
@@ -76,3 +80,37 @@ helm install kafka-exporter prometheus-community/prometheus-kafka-exporter \
 kubectl port-forward -n monitoring deployment/kube-prom-stack-grafana 3000:3000
 kubectl port-forward -n monitoring svc/kube-prom-stack-kube-prome-prometheus 9090:9090
 '''
+
+pietro@PB-IdeaPad-Slim:~/magistrale/scalable-reliable-services-m/SharpWing/chat $ kubectl delete deployments --all
+kubectl delete services --all
+kubectl delete pods --all
+deployment.apps "kafka-deployment" deleted
+deployment.apps "kafka-exporter-prometheus-kafka-exporter" deleted
+deployment.apps "layer1-deployment" deleted
+deployment.apps "layer2-deployment" deleted
+deployment.apps "layer3-deployment" deleted
+deployment.apps "postgres-deployment" deleted
+deployment.apps "postgres-exporter-prometheus-postgres-exporter" deleted
+deployment.apps "redis-deployment" deleted
+deployment.apps "redis-exporter-prometheus-redis-exporter" deleted
+service "kafka-exporter-prometheus-kafka-exporter" deleted
+service "kubernetes" deleted
+service "loki" deleted
+service "loki-headless" deleted
+service "loki-memberlist" deleted
+service "my-kafka" deleted
+service "postgres-exporter-prometheus-postgres-exporter" deleted
+service "postgres-service" deleted
+service "redis-exporter-prometheus-redis-exporter" deleted
+service "redis-service" deleted
+pod "kafka-deployment-7889695949-4zsth" deleted
+pod "kafka-exporter-prometheus-kafka-exporter-79c4997ff-v8mpp" deleted
+pod "layer1-deployment-5c856cfc47-l5mxg" deleted
+pod "layer2-deployment-79cc5d6dbb-zs474" deleted
+pod "layer3-deployment-64dcd689c-k6wnc" deleted
+pod "loki-0" deleted
+pod "loki-promtail-958pl" deleted
+pod "postgres-deployment-b884bd8b6-25qkp" deleted
+pod "postgres-exporter-prometheus-postgres-exporter-59dcb6b7dc-tp87s" deleted
+pod "redis-deployment-6c6fcd64b8-7fx6w" deleted
+pod "redis-exporter-prometheus-redis-exporter-6dbd4d65df-ckdg8" deleted
